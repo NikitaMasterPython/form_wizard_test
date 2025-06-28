@@ -1,0 +1,60 @@
+name: Run tests on any Push event
+
+on:
+  push:
+    tags:
+      - '!refs/tags/*'
+    branches:
+      - '*'
+jobs:
+
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      - name: Set up Python environment
+        uses: astral-sh/setup-uv@v5
+      - name: flake8 Lint
+        run: uv sync
+      - name: Run flake8
+        run: uv run flake8 --ignore F401 --max-line-length 120 src
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - name: Run tests
+        run: uv run pytest
+
+  deploy:
+    needs: [tests, flake8-lint]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPN_HOST_IP }}
+          username: ${{ secrets.VPN_USER_NAME }}
+          password: ${{ secrets.VPN_PASSWORD }}
+          port: ${{ secrets.VPN_PORT }}
+          script: |
+            cd /${{ secrets.VPN_USER_NAME }}/${{ secrets.PROJECT_PATH }}
+            touch .env
+            echo '' > .env
+            echo APP_BOT_TOKEN=${{ secrets.APP_BOT_TOKEN }} >> .env
+            echo APP_TIMEOUT=${{ vars.APP_TIMEOUT }} >> .env
+            git checkout master
+            git pull
+            docker build . -t=form_wizard_test -f=docker/Dockerfile
+            docker stop form_wizard_test
+            docker rm form_wizard_test
+            docker run -d --env-file=.env --name form_wizard_test form_wizard_test
+            docker system prune --all --force
