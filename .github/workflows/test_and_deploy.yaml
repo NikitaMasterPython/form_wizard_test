@@ -39,7 +39,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
       - name: Execute remote SSH commands using password
-
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPN_HOST_IP }}
