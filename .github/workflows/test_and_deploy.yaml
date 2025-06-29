@@ -5,7 +5,7 @@ on:
     tags:
       - '!refs/tags/*'
     branches:
-      - master
+      - '*'
 jobs:
 
   flake8-lint:
