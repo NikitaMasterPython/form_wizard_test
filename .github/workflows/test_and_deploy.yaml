@@ -40,11 +40,16 @@ jobs:
         uses: actions/checkout@master
       - name: Execute remote SSH commands using password
         uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPN_HOST_IP }}
-          username: ${{ secrets.VPN_USER_NAME }}
-          password: ${{ secrets.VPN_PASSWORD }}
-          port: ${{ secrets.VPN_PORT }}
+          with:
+            host: ваш_сервер.stark-industries.solutions
+            username: ваш_пользователь
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+#        uses: appleboy/ssh-action@v1
+#        with:
+#          host: ${{ secrets.VPN_HOST_IP }}
+#          username: ${{ secrets.VPN_USER_NAME }}
+#          password: ${{ secrets.VPN_PASSWORD }}
+#          port: ${{ secrets.VPN_PORT }}
           script: |
             cd /${{ secrets.VPN_USER_NAME }}/${{ secrets.PROJECT_PATH }}
             touch .env
