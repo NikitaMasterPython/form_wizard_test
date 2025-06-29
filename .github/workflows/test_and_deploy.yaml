@@ -42,7 +42,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPN_HOST_IP }}
-          username: ${{ secrets.VPN_USERNAME }}
+          username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.VPN_PASSWORD }}
           port: ${{ secrets.VPN_PORT }}
           script: |
