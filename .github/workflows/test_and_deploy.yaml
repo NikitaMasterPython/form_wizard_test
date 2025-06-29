@@ -47,7 +47,7 @@ jobs:
           port: ${{ secrets.VPN_PORT }}
           script: |
             
-            cd /${{ secrets.VPN_USER_NAME }}/${{ secrets.PROJECT_PATH }}
+            cd /${{ secrets.VPN_USER_NAME }}/${{ vars.PROJECT_PATH }}
             touch .env
             echo '' > .env
             echo APP_BOT_TOKEN=${{ secrets.APP_BOT_TOKEN }} >> .env
