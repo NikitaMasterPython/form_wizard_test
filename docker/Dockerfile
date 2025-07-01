@@ -3,6 +3,7 @@ FROM ubuntu AS base
 RUN apt-get -y update
 RUN apt-get install -y curl
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN apt-get -y install ffmpeg
 
 WORKDIR /opt/app-root/
 COPY src src/

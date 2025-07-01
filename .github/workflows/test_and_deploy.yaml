@@ -34,7 +34,7 @@ jobs:
   deploy:
     needs: [tests, flake8-lint]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@master
@@ -42,17 +42,20 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPN_HOST_IP }}
-          username: ${{ secrets.VPN_USER_NAME }}
+          username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.VPN_PASSWORD }}
           port: ${{ secrets.VPN_PORT }}
           script: |
-            cd /${{ secrets.VPN_USER_NAME }}/${{ secrets.PROJECT_PATH }}
+            
+            cd /${{ secrets.SSH_USERNAME }}/${{ vars.PROJECT_PATH }}
             touch .env
             echo '' > .env
             echo APP_BOT_TOKEN=${{ secrets.APP_BOT_TOKEN }} >> .env
             echo APP_TIMEOUT=${{ vars.APP_TIMEOUT }} >> .env
             git checkout master
             git pull
+
+            
             docker build . -t=form_wizard_test -f=docker/Dockerfile
             docker stop form_wizard_test
             docker rm form_wizard_test
