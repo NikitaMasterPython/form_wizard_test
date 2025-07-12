@@ -1,6 +1,7 @@
 import asyncio
 import threading
 
+from src.database.create_tables import create_tables
 from src.handliers.start import start_router
 from src.tg_bot.main import (
     bot,
@@ -20,6 +21,7 @@ class ThreadedEventLoop(threading.Thread):
 
 async def main():
     dp.include_router(start_router)
+    await create_tables()
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
