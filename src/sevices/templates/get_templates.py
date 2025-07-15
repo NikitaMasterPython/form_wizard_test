@@ -1,3 +1,4 @@
+import logging
 from sqlite3 import (
     Connection,
     Cursor,
@@ -15,6 +16,8 @@ from gigachat.models.function_parameters_property import FunctionParametersPrope
 
 from src.configs.config import settings
 from src.configs.db import connection
+
+logger = logging.getLogger(__name__)
 
 
 class GetTemplates:
@@ -39,6 +42,53 @@ class GetTemplates:
             }
         ),
     )
+
+    GENERATE_DOCUMENT_FROM_TEMPLATE = Function(
+        name="generate_document_from_template",
+        description="Формирует готовый документ на основе указанного шаблона, заменяя все переменные на предоставленные значения",
+        parameters=FunctionParameters(
+            properties={
+                "template_rowid": FunctionParametersProperty(type="integer", description="ID шаблона из базы данных"),
+                "variables": FunctionParametersProperty(
+                    type="object",
+                    description="Объект с значениями для подстановки в шаблон",
+                    properties={
+                        "full_name": FunctionParametersProperty(
+                            type="string", description="Фамилия Имя Отчество заявителя"
+                        ),
+                        "date": FunctionParametersProperty(
+                            type="string",
+                            description="Дата когда необходимо воспользоваться автомобилем в формате ДД.ММ.ГГГГ.",
+                        ),
+                    },
+                    required=["full_name", "date"],
+                ),
+            },
+            required=["template_rowid", "variables"],
+        ),
+    )
+
+    @connection
+    async def generate_document_from_template(
+        self, template_rowid: int, full_name: str, date: str, conn: Connection = None, cursor: Cursor = None
+    ) -> str:  # Изменено на str вместо dict
+        """Обработка шаблона заявления на автомобиль"""
+        try:
+            cursor.execute("SELECT 1 FROM templates WHERE ROWID = ?", (template_rowid,))
+            if not cursor.fetchone():
+                return "Шаблон не найден"
+
+            result = {
+                "template_id": template_rowid,
+                "full_name": full_name,
+                "date": date.replace(".", "_"),
+            }
+
+            print("Извлеченные переменные:", result)
+            return "\n".join(f"{k}: {v}" for k, v in result.items())
+
+        except Exception as e:
+            return f"Ошибка: {str(e)}"
 
     @classmethod
     @connection
