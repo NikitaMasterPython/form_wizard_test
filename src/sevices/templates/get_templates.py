@@ -4,6 +4,7 @@ from sqlite3 import (
     Cursor,
 )
 
+from docx.document import Document as DocumentObject
 from gigachat import GigaChat
 from gigachat.models import (
     Chat,
@@ -16,6 +17,7 @@ from gigachat.models.function_parameters_property import FunctionParametersPrope
 
 from src.configs.config import settings
 from src.configs.db import connection
+from src.sevices.templates.create_templates import CreateDocuments
 
 logger = logging.getLogger(__name__)
 
@@ -49,43 +51,30 @@ class GetTemplates:
         parameters=FunctionParameters(
             properties={
                 "template_rowid": FunctionParametersProperty(type="integer", description="ID шаблона из базы данных"),
-                "variables": FunctionParametersProperty(
-                    type="object",
-                    description="Объект с значениями для подстановки в шаблон",
-                    properties={
-                        "full_name": FunctionParametersProperty(
-                            type="string", description="Фамилия Имя Отчество заявителя"
-                        ),
-                        "date": FunctionParametersProperty(
-                            type="string",
-                            description="Дата когда необходимо воспользоваться автомобилем в формате ДД.ММ.ГГГГ.",
-                        ),
-                    },
-                    required=["full_name", "date"],
+                "full_name": FunctionParametersProperty(type="string", description="Фамилия Имя Отчество заявителя"),
+                "date": FunctionParametersProperty(
+                    type="string",
+                    description="Дата когда необходимо воспользоваться автомобилем в формате ДД.ММ.ГГГГ.",
                 ),
             },
-            required=["template_rowid", "variables"],
+            required=["template_rowid", "full_name", "date"],
         ),
     )
 
+    @classmethod
     @connection
     async def generate_document_from_template(
-        self, template_rowid: int, full_name: str, date: str, conn: Connection = None, cursor: Cursor = None
-    ) -> str:  # Изменено на str вместо dict
+        cls, template_rowid: int, full_name: str, date: str, conn: Connection = None, cursor: Cursor = None
+    ) -> str | DocumentObject:
         """Обработка шаблона заявления на автомобиль"""
         try:
-            cursor.execute("SELECT 1 FROM templates WHERE ROWID = ?", (template_rowid,))
-            if not cursor.fetchone():
+            cursor.execute("SELECT path FROM templates WHERE ROWID = ?", (template_rowid,))
+            path = cursor.fetchone()
+            if not path:
                 return "Шаблон не найден"
 
-            result = {
-                "template_id": template_rowid,
-                "full_name": full_name,
-                "date": date.replace(".", "_"),
-            }
-
-            print("Извлеченные переменные:", result)
-            return "\n".join(f"{k}: {v}" for k, v in result.items())
+            create = CreateDocuments(path[0], full_name=full_name, data=date)
+            return create.create_doc()
 
         except Exception as e:
             return f"Ошибка: {str(e)}"

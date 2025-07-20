@@ -1,3 +1,5 @@
+import io
+
 from aiogram import (
     F,
     Router,
@@ -7,7 +9,11 @@ from aiogram.filters import (
     Command,
     CommandStart,
 )
-from aiogram.types import Message
+from aiogram.types import (
+    BufferedInputFile,
+    Message,
+)
+from docx.document import Document as DocumentObject
 
 from src.sevices.audio_converter.voice_to_text import VoiceToTextService
 from src.sevices.lim_giga.giga import GIGAChatService
@@ -36,7 +42,13 @@ async def get_audio_messages(message: Message):
     """Обработка голосовых сообщений"""
     message_text = await VoiceToTextService.parce_voice_message(message)
     answer_llm = await GIGAChatService.request_function(message_text, message.from_user.id)
-    await message.answer(answer_llm)
+    if isinstance(answer_llm, str):
+        await message.answer(answer_llm)
+    elif isinstance(answer_llm, DocumentObject):
+        bytes_doc = io.BytesIO()
+        answer_llm.save(bytes_doc)
+        new_file = BufferedInputFile(bytes_doc.getvalue(), "new_file.docx")
+        await message.reply_document(new_file)
 
 
 @start_router.message(F.document)
@@ -51,4 +63,10 @@ async def get_all_messages(message: Message):
     """Обработка всех непонятных текстовых сообщений"""
     if message.content_type == types.ContentType.TEXT:
         answer_llm = await GIGAChatService.request_function(message.text, message.from_user.id)
-        await message.answer(answer_llm)
+        if isinstance(answer_llm, str):
+            await message.answer(answer_llm)
+        elif isinstance(answer_llm, DocumentObject):
+            bytes_doc = io.BytesIO()
+            answer_llm.save(bytes_doc)
+            new_file = BufferedInputFile(bytes_doc.getvalue(), "new_file.docx")
+            await message.reply_document(new_file)
