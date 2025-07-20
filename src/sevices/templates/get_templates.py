@@ -47,7 +47,8 @@ class GetTemplates:
 
     GENERATE_DOCUMENT_FROM_TEMPLATE = Function(
         name="generate_document_from_template",
-        description="Формирует готовый документ на основе указанного шаблона, заменяя все переменные на предоставленные значения",
+        description="Формирует готовый документ на основе указанного "
+        "шаблона, заменяя все переменные на предоставленные значения",
         parameters=FunctionParameters(
             properties={
                 "template_rowid": FunctionParametersProperty(type="integer", description="ID шаблона из базы данных"),
