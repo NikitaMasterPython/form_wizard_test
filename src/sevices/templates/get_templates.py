@@ -154,7 +154,7 @@ class GetTemplates:
             "Если не один шаблон не подходит верни сообщение: 'У вас нет не одно подходящего шаблона.'",
         )
         with GigaChat(
-            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Pro"
+            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Max"
         ) as giga:
             response = giga.chat(Chat(messages=[all_templates, user_request, command]))
         if response.choices[0].message.content.isdigit():
