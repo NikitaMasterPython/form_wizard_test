@@ -42,18 +42,7 @@ class GIGAChatService:
             )
 
             if function_name := response.choices[0].message.function_call:
-                args = function_name.arguments
-
-                if function_name.name == "generate_document_from_template":
-                    """Правильный вызов через экземпляр класса"""
-                    return await GetTemplates.generate_document_from_template(
-                        template_rowid=args["template_rowid"],
-                        full_name=args.get("full_name", ""),
-                        date=args.get("date", ""),
-                    )
-                else:
-                    """Для других методов"""
-                    return await getattr(GetTemplates, function_name.name)(user_id=user_id, user_request=message)
+                return await getattr(GetTemplates, function_name.name)(user_id=user_id, user_request=message)
 
             return response.choices[0].message.content
 
