@@ -64,6 +64,11 @@ class GetTemplates:
         variables = await cls.get_template_vars_in_agent(user_id, user_request, as_list=True)
         if isinstance(variables, str):
             return variables
+
+
+
+
+
         template_rowid = variables["template_rowid"]
         foo = copy.deepcopy(cls.GENERATE_DOCUMENT_FROM_TEMPLATE)
         for var in variables["variables"]:
@@ -83,6 +88,8 @@ class GetTemplates:
                 args = function_name.arguments
             else:
                 args = {}
+
+            logger.debug(f"Аргументы для шаблона: {args}")  # больше логов
             try:
                 cursor.execute("SELECT path FROM templates WHERE ROWID = ?", (template_rowid,))
                 path = cursor.fetchone()

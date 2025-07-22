@@ -17,6 +17,9 @@ class CreateDocuments:
         self.template_path = template_path
         self.template_vars = {TEMPLATE_KEY.substitute(key=key): value for key, value in kwargs.items()}
 
+
+
+
     def create_doc(self) -> DocumentObject:
         """Формирование документа"""
         document = docx.Document(self.template_path)
