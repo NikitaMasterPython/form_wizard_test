@@ -58,7 +58,7 @@ class InitialTemplatePreparation:
                     template_variables[var_name] = argument
                     await cls.delete_paragraph(i)
                 else:
-                    logger.error("".join([num, text, "Не удалось получить данные для формирования переменной."]))
+
                     continue
             if re.match(TEMPLATE_TITLE, text):
                 template_name = text.replace("<<", "").replace(">>", "")
