@@ -29,5 +29,3 @@ class CreateDocuments:
                 value = self.template_vars.get(var, var)
                 i.text = i.text.replace(var, value)
         return document
-
-
