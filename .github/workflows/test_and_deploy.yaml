@@ -37,7 +37,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@main
       - name: Execute remote SSH commands using password
         uses: appleboy/ssh-action@v1
         with:
@@ -52,7 +52,7 @@ jobs:
             echo '' > .env
             echo APP_BOT_TOKEN=${{ secrets.APP_BOT_TOKEN }} >> .env
             echo APP_TIMEOUT=${{ vars.APP_TIMEOUT }} >> .env
-            git checkout master
+            git checkout main
             git pull
 
             

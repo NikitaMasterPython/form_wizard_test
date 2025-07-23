@@ -76,7 +76,7 @@ class GetTemplates:
                 type="string", description=var["description"]
             )
         with GigaChat(
-            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Max"
+            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Pro"
         ) as giga:
             response = giga.chat(
                 Chat(
@@ -151,10 +151,10 @@ class GetTemplates:
             role=MessagesRole.USER,
             content="Выбери из списка наиболее подходящий шаблон. "
             "Не придумывай переменные просто ответь какое значение ROWID использовать. Ответ верни одной цифрой."
-            "Если не один шаблон не подходит верни сообщение: 'У вас нет не одно подходящего шаблона.'",
+            "Если не один шаблон не подходит верни сообщение: 'У вас нет не одного подходящего шаблона, или я Вас не понял, напишите мне слово Шаблоны, я выведу список, повторите тоже самое, указав номер шаблона, спасибо.'",
         )
         with GigaChat(
-            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Max"
+            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Pro"
         ) as giga:
             response = giga.chat(Chat(messages=[all_templates, user_request, command]))
         if response.choices[0].message.content.isdigit():

@@ -28,7 +28,7 @@ class GIGAChatService:
         ]
 
         with GigaChat(
-            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Max"
+            credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Pro"
         ) as giga:
             response = giga.chat(
                 Chat(
