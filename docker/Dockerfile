@@ -1,4 +1,4 @@
-FROM ubuntu AS master
+FROM ubuntu AS base
 
 RUN apt-get -y update
 RUN apt-get install -y curl
@@ -17,6 +17,6 @@ RUN uv sync
 
 ENV TZ="Europe/Moscow"
 
-FROM base AS main
+FROM base AS master
 
 CMD uv run src/main.py
