@@ -52,10 +52,13 @@ jobs:
             echo '' > .env
             echo APP_BOT_TOKEN=${{ secrets.APP_BOT_TOKEN }} >> .env
             echo APP_TIMEOUT=${{ vars.APP_TIMEOUT }} >> .env
+            echo APP_GIGA_OAUTH_URL=${{ secrets.APP_GIGA_OAUTH_URL }} >> .env
+            echo APP_GIGA_CLIENT_ID=${{ secrets.APP_GIGA_CLIENT_ID }} >> .env
+            echo APP_GIGA_SCOPE=${{ secrets.APP_GIGA_SCOPE }} >> .env
+            echo APP_GIGA_AUTHORIZATION_KEY=${{ secrets.APP_GIGA_AUTHORIZATION_KEY }} >> .env
             git checkout main
             git pull
 
-            
             docker build . -t=form_wizard_test -f=docker/Dockerfile
             docker stop form_wizard_test
             docker rm form_wizard_test

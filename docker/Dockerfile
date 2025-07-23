@@ -1,4 +1,4 @@
-FROM ubuntu AS base
+FROM ubuntu AS master
 
 RUN apt-get -y update
 RUN apt-get install -y curl
