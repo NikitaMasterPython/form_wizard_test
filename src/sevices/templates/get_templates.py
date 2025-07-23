@@ -65,10 +65,6 @@ class GetTemplates:
         if isinstance(variables, str):
             return variables
 
-
-
-
-
         template_rowid = variables["template_rowid"]
         foo = copy.deepcopy(cls.GENERATE_DOCUMENT_FROM_TEMPLATE)
         for var in variables["variables"]:
@@ -151,7 +147,9 @@ class GetTemplates:
             role=MessagesRole.USER,
             content="Выбери из списка наиболее подходящий шаблон. "
             "Не придумывай переменные просто ответь какое значение ROWID использовать. Ответ верни одной цифрой."
-            "Если не один шаблон не подходит верни сообщение: 'У вас нет не одного подходящего шаблона, или я Вас не понял, напишите мне слово Шаблоны, я выведу список, повторите тоже самое, указав номер шаблона, спасибо.'",
+            "Если не один шаблон не подходит верни сообщение: 'У вас нет не одного подходящего шаблона, "
+                    "или я Вас не понял, напишите мне слово Шаблоны, я выведу список, повторите тоже самое, "
+                    "указав номер шаблона, спасибо.'",
         )
         with GigaChat(
             credentials=settings.GIGA_AUTHORIZATION_KEY, verify_ssl_certs=False, model="GigaChat-Pro"
