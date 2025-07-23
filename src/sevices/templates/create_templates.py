@@ -28,5 +28,6 @@ class CreateDocuments:
             for var in re.findall(TEMPLATE_CONSTANT, i.text):
                 value = self.template_vars.get(var, var)
                 i.text = i.text.replace(var, value)
-
         return document
+
+
