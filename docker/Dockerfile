@@ -18,6 +18,6 @@ RUN uv sync
 
 ENV TZ="Europe/Moscow"
 
-FROM base AS main
+FROM base AS master
 
 CMD uv run src/main.py
