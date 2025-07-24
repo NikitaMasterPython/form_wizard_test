@@ -22,8 +22,13 @@ class Converter:
     def _audio_to_wav(self):
         """Конвертация аудио файла из ogg в wav"""
         subprocess.run(
-            ["/opt/homebrew/bin/ffmpeg", "-v", "quiet", "-i", self.wav_file.replace(".wav", ".ogg"), self.wav_file]
+            ["ffmpeg", "-v", "quiet", "-i", self.wav_file.replace(".wav", ".ogg"), self.wav_file]
         )
+    # def _audio_to_wav(self):
+    #     """Конвертация аудио файла из ogg в wav"""
+    #     subprocess.run(
+    #         ["/opt/homebrew/bin/ffmpeg", "-v", "quiet", "-i", self.wav_file.replace(".wav", ".ogg"), self.wav_file]
+    #     )
 
     def __del__(self):
         os.remove(self.wav_file)
