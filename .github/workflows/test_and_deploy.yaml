@@ -57,7 +57,6 @@ jobs:
             echo APP_GIGA_SCOPE=${{ secrets.APP_GIGA_SCOPE }} >> .env
             echo APP_GIGA_AUTHORIZATION_KEY=${{ secrets.APP_GIGA_AUTHORIZATION_KEY }} >> .env
             git checkout main
-            git merge deploy_bot 
             git pull
 
             docker build . -t=form_wizard_test -f=docker/Dockerfile
