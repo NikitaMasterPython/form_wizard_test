@@ -49,6 +49,7 @@ main_keyboard = ReplyKeyboardMarkup(
     input_field_placeholder="Выберите действие..."
 )
 
+
 @start_router.message(CommandStart())
 async def cmd_start(message: Message):
     welcome_text = (
@@ -60,6 +61,7 @@ async def cmd_start(message: Message):
         "- ⚙️ Добавить шаблон - создать свой шаблон"
     )
     await message.answer(welcome_text, reply_markup=main_keyboard)
+
 
 @start_router.message(F.text == "📋 Инструкция по использованию")
 async def show_instructions(message: Message):
@@ -86,6 +88,7 @@ async def show_instructions(message: Message):
         "3. Вы также можете добавлять свои шаблоны через меню «⚙️ Добавить шаблон»"
     )
     await message.answer(instructions)
+
 
 @start_router.message(F.text == "📄 Шаблоны документов")
 async def show_templates(message: Message):
@@ -129,6 +132,7 @@ async def show_templates(message: Message):
         reply_markup=main_keyboard
     )
 
+
 @start_router.message(F.text == "❓ Помощь")
 async def show_help(message: Message):
     help_text = (
@@ -166,40 +170,6 @@ async def add_template(message: Message):
     )
 
 
-
-#
-# @start_router.message(CommandStart())
-# async def cmd_start(message: Message):
-#     await message.answer("Никита молодец.")
-#
-#
-# @start_router.message(Command("start_2"))
-# async def cmd_start_2(message: Message):
-#     await message.answer("1.Для подготовки документов обратитесь к боту с запросом «Шаблоны». \n \n "
-#                          "2. Выберете подходящий шаблон и отправьте соответствующее голосовое "
-#                          "или текстовое сообщение. \n"
-#                          "Например, при необходимости подготовки заявления на служебный автомобиль "
-#                          "запрос должен содержать следующий текст: \n \n "
-#                          "Подготовь заявление на служебный автомобиль на 20.09.2025 на "
-#                          "Иванова Ивана Ивановича. \n \n "
-#                          "Подготовь заявление на оплату расходов к месту проведения отдыха "
-#                          "на 15000 рублей на Петрова Петра Николаевича \n \n "
-#                          "Подготовь заявление на офисную бумагу в отдел кадров "
-#                          "от Петрова Петра Петровича. \n \n"
-#                          "Подготовь документальное уведомление, 20.03.2025 на территории "
-#                          "организации запланированы ремонтные работы \n \n "
-#                          "Подготовь служебную записку на доставку бетомешалка-200 по адресу: "
-#                          "г. Хабаровск, ул. Пионерская, д.20 от И.И. Иванова \n \n "
-#                          "Подготовь служебную записку на списание пылесос-А500, "
-#                          "Иванов Иван Иванович \n \n "
-#                          "Также вы можете добавлять свои шаблоны.")
-#
-#
-# @start_router.message(F.text == "/start_3")
-# async def cmd_start_3(message: Message):
-#     await message.answer("Запуск сообщения по команде /start_3 используя магический фильтр F.text!")
-
-
 @start_router.message(F.voice)
 async def get_audio_messages(message: Message):
     """Обработка голосовых сообщений"""
@@ -214,13 +184,11 @@ async def get_audio_messages(message: Message):
         await message.reply_document(new_file)
 
 
-
 @start_router.message(F.document)
 async def get_docx_messages(message: Message):
     if message.content_type == types.ContentType.DOCUMENT:
         message_text = await InitialTemplatePreparation.parce_document(message)
         await message.answer(message_text)
-
 
 
 @start_router.message()
