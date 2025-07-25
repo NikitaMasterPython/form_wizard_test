@@ -214,11 +214,13 @@ async def get_audio_messages(message: Message):
         await message.reply_document(new_file)
 
 
+
 @start_router.message(F.document)
 async def get_docx_messages(message: Message):
     if message.content_type == types.ContentType.DOCUMENT:
         message_text = await InitialTemplatePreparation.parce_document(message)
         await message.answer(message_text)
+
 
 
 @start_router.message()
