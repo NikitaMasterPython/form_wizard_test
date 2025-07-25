@@ -61,8 +61,6 @@ async def cmd_start(message: Message):
     )
     await message.answer(welcome_text, reply_markup=main_keyboard)
 
-
-
 @start_router.message(F.text == "📋 Инструкция по использованию")
 async def show_instructions(message: Message):
     instructions = (
@@ -88,7 +86,6 @@ async def show_instructions(message: Message):
         "3. Вы также можете добавлять свои шаблоны через меню «⚙️ Добавить шаблон»"
     )
     await message.answer(instructions)
-
 
 @start_router.message(F.text == "📄 Шаблоны документов")
 async def show_templates(message: Message):
