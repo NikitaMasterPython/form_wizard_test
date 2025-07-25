@@ -8,6 +8,7 @@ RUN apt-get -y install ffmpeg
 WORKDIR /opt/app-root/
 COPY src src/
 COPY data data/
+COPY templates templates/
 COPY .python-version .
 COPY pyproject.toml .
 
