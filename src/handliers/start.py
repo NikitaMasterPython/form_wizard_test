@@ -50,7 +50,6 @@ main_keyboard = ReplyKeyboardMarkup(
 )
 
 
-
 @start_router.message(CommandStart())
 async def cmd_start(message: Message):
     welcome_text = (
@@ -62,7 +61,6 @@ async def cmd_start(message: Message):
         "- ⚙️ Добавить шаблон - создать свой шаблон"
     )
     await message.answer(welcome_text, reply_markup=main_keyboard)
-
 
 
 @start_router.message(F.text == "📋 Инструкция по использованию")
